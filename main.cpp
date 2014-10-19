@@ -4,9 +4,9 @@
 
 int main(int argc, char *argv[])
 {
-    Window &window = Window::getSingleton();
+    Window &window = Window::getSingleton(400, 200);
 
-    std::cout << "Stack is being removed" << std::endl;
+    std::cout << window.getWidth() << std::endl;
 
     return 0;
 }
