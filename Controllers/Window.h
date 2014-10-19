@@ -6,9 +6,9 @@ class Window
 private:
     Window();
     void operator=(Window const &windowRight);
+    Window(Window const &windowCopy);
 
 public:
-    Window(Window const &windowCopy);
     ~Window();
     static Window &getSingleton();
 };
