@@ -26,7 +26,7 @@ void Window::operator=(Window const &windowRight)
 }
 
 // Singleton creator/getter
-Window Window::getSingleton()
+Window &Window::getSingleton()
 {
     static Window singleton;
     return singleton;

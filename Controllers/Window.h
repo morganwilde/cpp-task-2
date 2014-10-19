@@ -5,12 +5,12 @@ class Window
 {
 private:
     Window();
-    Window(Window const &windowCopy);
     void operator=(Window const &windowRight);
 
 public:
+    Window(Window const &windowCopy);
     ~Window();
-    static Window getSingleton();
+    static Window &getSingleton();
 };
 
 #endif
