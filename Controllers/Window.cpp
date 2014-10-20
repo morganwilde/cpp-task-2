@@ -104,7 +104,7 @@ void Window::glutInit(int *glutArgcp, char **glutArgv)
         window.glutInitialised = true;
         
         // Initialise glut
-        glutInit(window.getGlutArgcp(), window.getGlutArgv());
+        
         glutInitDisplayMode(GLUT_RGBA|GLUT_DOUBLE|GLUT_DEPTH);
         glutInitWindowSize(window.getWidth(), window.getHeight());
         glutCreateWindow(window.getTitle().c_str());
@@ -151,7 +151,9 @@ void Window::glutInit(int *glutArgcp, char **glutArgv)
 }
 void Window::glutDisplayFrame()
 {
-    glutCheckLoop();
+    while (1) {
+        glutCheckLoop();
+    }
 }
 
 // Functions that need to declared outside of the Window object scope
