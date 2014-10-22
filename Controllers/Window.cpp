@@ -30,6 +30,8 @@ Window::~Window()
     #ifdef DEBUG
     std::cout << "Window destroyed -> " << this << std::endl;
     #endif
+    // Clean up
+    free(this->getTitleCString());
 }
 
 // Singleton creator/getter
@@ -45,85 +47,94 @@ Window &Window::getSingleton(int width, int height, std::string title)
     
     window.width = width;
     window.height = height;
-    window.title = title;
+    window.setTitle(title);
 
     return window;
 }
 
 // Setters
-void Window::setGlutArgcp(int *glutArgcp)
+void Window::setTitle(std::string title)
 {
-    Window::getSingleton().glutArgcp = glutArgcp;
+    // C++ string title
+    this->title = title;
+    // C string title
+    const char *temp = title.c_str();
+    const int size = title.size() + 1;
+    if (!this->titleCString) {
+        this->titleCString = (char *)malloc(sizeof(char) * size);
+    } else {
+        this->titleCString = (char *)realloc(this->titleCString, sizeof(char) * size);
+    }
+    for (int i = 0; i < size; i++) {
+        this->titleCString[i] = temp[i];
+    }
 }
-void Window::setGlutArgv(char **glutArgv)
+void Window::setDisplayLoopActive(bool isActive)
 {
-    Window::getSingleton().glutArgv = glutArgv;
+    this->displayLoopActive = isActive;
 }
+// Setters glut related
 void Window::setGlutArguments(int *glutArgcp, char **glutArgv)
 {
-    Window &window = Window::getSingleton();
-
-    window.setGlutArgcp(glutArgcp);
-    window.setGlutArgv(glutArgv);
+    this->glutArgcp = glutArgcp;
+    this->glutArgv = glutArgv;
 }
 void Window::setGlutCoordinateAttribute(const char *name)
 {
-    Window &window = Window::getSingleton();
-    
-    std::cout << "set: " << window.getGlutCoordinateAttribute() << " to: " << name << std::endl;
-    window.glutCoordinateAttribute = glGetAttribLocation(window.getGlutProgram(), name);
-    std::cout << "set: " << window.getGlutCoordinateAttribute() << std::endl;
+    this->glutCoordinateAttribute = glGetAttribLocation(this->getGlutProgram(), name);
 }
 
 // Getters
 int Window::getWidth()
 {
-    return Window::getSingleton().width;
+    return this->width;
 }
 int Window::getHeight()
 {
-    return Window::getSingleton().height;
+    return this->height;
 }
 std::string Window::getTitle()
 {
-    return Window::getSingleton().title;
+    return this->title;
+}
+char *Window::getTitleCString()
+{
+    return this->titleCString;
+}
+bool Window::isDisplayLoopActive()
+{
+    return this->displayLoopActive;
 }
 // Getters glut related
-int *Window::getGlutArgcp()
-{
-    return Window::getSingleton().glutArgcp;
-}
-char **Window::getGlutArgv()
-{
-    return Window::getSingleton().glutArgv;
-}
 GLuint Window::getGlutProgram()
 {
-    return Window::getSingleton().glutProgram;
+    return this->glutProgram;
 }
 GLint Window::getGlutCoordinateAttribute()
 {
-    return Window::getSingleton().glutCoordinateAttribute;
+    return this->glutCoordinateAttribute;
 }
 
 // Glut wrapper methods
 void Window::glutInitWrapper(int *glutArgcp, char *glutArgv[])
 {
-    Window &window = Window::getSingleton();
-    if (!window.glutInitialised) {
+    if (!this->glutInitialised) {
         // Save object state
-        window.setGlutArguments(glutArgcp, glutArgv);
-        window.glutInitialised = true;
+        this->setGlutArguments(glutArgcp, glutArgv);
+        this->glutInitialised = true;
+        this->setDisplayLoopActive(true);
         
         // Initialise glut
         glutInit(glutArgcp, glutArgv);
         glutInitDisplayMode(GLUT_RGBA|GLUT_DOUBLE|GLUT_DEPTH);
-        glutInitWindowSize(window.getWidth(), window.getHeight());
-        glutCreateWindow(window.getTitle().c_str());
+        glutInitWindowSize(this->getWidth(), this->getHeight());
+        std::cout << this->getTitleCString() << std::endl;
+        glutCreateWindow(this->getTitleCString());
 
         // Assign callback functions
         glutDisplayFunc(windowDisplay);
 
+        /*
         // Initialise resources
         GLint linkError = GL_FALSE;
         window.glutProgram = glCreateProgram();
@@ -166,12 +177,8 @@ void Window::glutInitWrapper(int *glutArgcp, char *glutArgv[])
         glGetProgramiv(window.glutProgram, GL_ATTACHED_SHADERS, &linkError);
         std::cout << "active attributes: " << linkError << std::endl;
 
-        const char *name = "coord3d";
-        std::cout << "window.glutCoordinateAttribute: " << window.glutCoordinateAttribute << std::endl;
-        window.glutCoordinateAttribute = glGetAttribLocation(window.glutProgram, name);
-        std::cout << "window.glutCoordinateAttribute: " << window.glutCoordinateAttribute << std::endl;
-        //window.setGlutCoordinateAttribute("coord2d");
-
+        window.setGlutCoordinateAttribute("coord3d");
+        */
     }
 }
 void Window::glutDisplayFrame()
@@ -179,18 +186,26 @@ void Window::glutDisplayFrame()
     glutCheckLoop();
 }
 
+void Window::glutDisplayLoop()
+{
+    while (this->isDisplayLoopActive()) {
+        this->glutDisplayFrame();
+    }
+}
+
 // Functions that need to declared outside of the Window object scope
 void windowDisplay()
 {
     // Clear background to white
-    glClearColor(1.0, 1.0, 1.0, 1.0);
+    glClearColor(1.0, 0.5, 1.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
     
     // Use program
-    Window &window = Window::getSingleton();
-    glUseProgram(window.getGlutProgram());
+    //Window &window = Window::getSingleton();
+    //glUseProgram(window.getGlutProgram());
 
     // Temp
+    /*
     glEnableVertexAttribArray(window.getGlutCoordinateAttribute());
     GLfloat a = 0.4;
     GLfloat vertices[] = {
@@ -210,6 +225,7 @@ void windowDisplay()
     glDrawArrays(GL_TRIANGLES, 0, 3);
     glDisableVertexAttribArray(window.getGlutCoordinateAttribute());
     // /Temp
+    */
 
     // Display result
     glutSwapBuffers();
