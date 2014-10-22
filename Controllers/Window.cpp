@@ -45,14 +45,22 @@ Window &Window::getSingleton(int width, int height, std::string title)
 {
     Window &window = Window::getSingleton();
     
-    window.width = width;
-    window.height = height;
+    window.setWidth(width);
+    window.setHeight(height);
     window.setTitle(title);
 
     return window;
 }
 
 // Setters
+void Window::setWidth(int width)
+{
+    this->width = width;
+}
+void Window::setHeight(int height)
+{
+    this->height = height;
+}
 void Window::setTitle(std::string title)
 {
     // C++ string title
@@ -60,11 +68,13 @@ void Window::setTitle(std::string title)
     // C string title
     const char *temp = title.c_str();
     const int size = title.size() + 1;
+    // allocate room for it
     if (!this->titleCString) {
         this->titleCString = (char *)malloc(sizeof(char) * size);
     } else {
         this->titleCString = (char *)realloc(this->titleCString, sizeof(char) * size);
     }
+    // copy char by char
     for (int i = 0; i < size; i++) {
         this->titleCString[i] = temp[i];
     }
@@ -77,7 +87,7 @@ void Window::setDisplayLoopActive(bool isActive)
 void Window::setGlutArguments(int *glutArgcp, char **glutArgv)
 {
     this->glutArgcp = glutArgcp;
-    this->glutArgv = glutArgv;
+    this->glutArgv  = glutArgv;
 }
 void Window::setGlutCoordinateAttribute(const char *name)
 {

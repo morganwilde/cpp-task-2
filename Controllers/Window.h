@@ -25,7 +25,6 @@ private:
     char **glutArgv;
     GLuint glutProgram;
     GLint glutCoordinateAttribute;
-    std::string glutCoordinateAttributeName;
     // Flags
     bool displayLoopActive;
 
@@ -34,6 +33,8 @@ public:
     static Window &getSingleton();
     static Window &getSingleton(int width, int height, std::string title);
     // Setters
+    void setWidth(int width);
+    void setHeight(int height);
     void setTitle(std::string title);
     void setDisplayLoopActive(bool isActive);
     // Setters glut related
