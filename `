@@ -66,14 +66,6 @@ void Window::setGlutArguments(int *glutArgcp, char **glutArgv)
     window.setGlutArgcp(glutArgcp);
     window.setGlutArgv(glutArgv);
 }
-void Window::setGlutCoordinateAttribute(const char *name)
-{
-    Window &window = Window::getSingleton();
-    
-    std::cout << "set: " << window.getGlutCoordinateAttribute() << " to: " << name << std::endl;
-    window.glutCoordinateAttribute = glGetAttribLocation(window.getGlutProgram(), name);
-    std::cout << "set: " << window.getGlutCoordinateAttribute() << std::endl;
-}
 
 // Getters
 int Window::getWidth()
@@ -101,10 +93,6 @@ GLuint Window::getGlutProgram()
 {
     return Window::getSingleton().glutProgram;
 }
-GLint Window::getGlutCoordinateAttribute()
-{
-    return Window::getSingleton().glutCoordinateAttribute;
-}
 
 // Glut wrapper methods
 void Window::glutInitWrapper(int *glutArgcp, char *glutArgv[])
@@ -120,14 +108,12 @@ void Window::glutInitWrapper(int *glutArgcp, char *glutArgv[])
         glutInitDisplayMode(GLUT_RGBA|GLUT_DOUBLE|GLUT_DEPTH);
         glutInitWindowSize(window.getWidth(), window.getHeight());
         glutCreateWindow(window.getTitle().c_str());
-
-        // Assign callback functions
-        glutDisplayFunc(windowDisplay);
+        /*
+        */
 
         // Initialise resources
         GLint linkError = GL_FALSE;
         window.glutProgram = glCreateProgram();
-        std::cout << "window.glutProgram: " << window.glutProgram << std::endl;
 
         // Shaders
         GLuint vs = glCreateShader(GL_VERTEX_SHADER);
@@ -135,18 +121,13 @@ void Window::glutInitWrapper(int *glutArgcp, char *glutArgv[])
         // Vertex shader
         const char *vsSource =
             "#version 120\n"
-            "attribute vec3 coord3d;\n"
             "void main(void) {\n"
-            "    gl_Position = vec4(coord3d, 1.0);\n"
-            "}";
+            "};";
         // Fragment shader
         const char *fsSource =
             "#version 120\n"
             "void main(void) {\n"
-            "    gl_FragColor[0] = 0.2;\n"
-            "    gl_FragColor[1] = 0.2;\n"
-            "    gl_FragColor[2] = 0.2;\n"
-            "}";
+            "};";
 
         glShaderSource(vs, 1, &vsSource, NULL);
         glShaderSource(fs, 1, &fsSource, NULL);
@@ -154,62 +135,35 @@ void Window::glutInitWrapper(int *glutArgcp, char *glutArgv[])
         glCompileShader(fs);
         GLint compileError = GL_FALSE;
         glGetShaderiv(vs, GL_COMPILE_STATUS, &compileError);
-        std::cout << "vs: " << vs << " compile: " << compileError << std::endl;
         glGetShaderiv(fs, GL_COMPILE_STATUS, &compileError);
-        std::cout << "fs: " << fs << " compile: " << compileError << std::endl;
 
         // Link resources
         glAttachShader(window.glutProgram, vs);
         glAttachShader(window.glutProgram, fs);
         glLinkProgram(window.glutProgram);
         glGetProgramiv(window.glutProgram, GL_LINK_STATUS, &linkError);
-        glGetProgramiv(window.glutProgram, GL_ATTACHED_SHADERS, &linkError);
-        std::cout << "active attributes: " << linkError << std::endl;
 
-        const char *name = "coord3d";
-        std::cout << "window.glutCoordinateAttribute: " << window.glutCoordinateAttribute << std::endl;
-        window.glutCoordinateAttribute = glGetAttribLocation(window.glutProgram, name);
-        std::cout << "window.glutCoordinateAttribute: " << window.glutCoordinateAttribute << std::endl;
-        //window.setGlutCoordinateAttribute("coord2d");
-
+        // Assign callback functions
+        glutDisplayFunc(windowDisplay);
     }
 }
 void Window::glutDisplayFrame()
 {
-    glutCheckLoop();
+    while (1) {
+        glutCheckLoop();
+    }
 }
 
 // Functions that need to declared outside of the Window object scope
 void windowDisplay()
 {
     // Clear background to white
-    glClearColor(0.5, 0.2, 1.0, 1.0);
+    glClearColor(1.0, 1.0, 1.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
     
     // Use program
     Window &window = Window::getSingleton();
     glUseProgram(window.getGlutProgram());
-
-    // Temp
-    glEnableVertexAttribArray(window.getGlutCoordinateAttribute());
-    GLfloat a = 0.4;
-    GLfloat vertices[] = {
-        -a, a,
-        a, a,
-        a, -a,
-    };
-    //std::cout << window.getGlutCoordinateAttribute() << std::endl;
-    glVertexAttribPointer(
-        window.getGlutCoordinateAttribute(),
-        2,
-        GL_FLOAT,
-        GL_FALSE,
-        0,
-        vertices
-    );
-    glDrawArrays(GL_TRIANGLES, 0, 3);
-    glDisableVertexAttribArray(window.getGlutCoordinateAttribute());
-    // /Temp
 
     // Display result
     glutSwapBuffers();

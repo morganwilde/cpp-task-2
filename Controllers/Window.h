@@ -34,6 +34,7 @@ public:
     void setGlutArgcp(int *glutArgcp);
     void setGlutArgv(char **glutArgv);
     void setGlutArguments(int *glutArgcp, char **glutArgv);
+    void setGlutCoordinateAttribute(const char *name);
     // Getters
     int getWidth();
     int getHeight();
@@ -42,9 +43,10 @@ public:
     int *getGlutArgcp();
     char **getGlutArgv();
     GLuint getGlutProgram();
+    GLint getGlutCoordinateAttribute();
 
     // Glut wrapper methods
-    void glutInit(int *glutArgcp, char **glutArgv);
+    void glutInitWrapper(int *glutArgcp, char *glutArgv[]);
     void glutDisplayFrame();
 };
 
