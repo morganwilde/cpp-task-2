@@ -183,7 +183,7 @@ void Window::glutDisplayFrame()
 void windowDisplay()
 {
     // Clear background to white
-    glClearColor(0.5, 0.2, 1.0, 1.0);
+    glClearColor(1.0, 1.0, 1.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
     
     // Use program

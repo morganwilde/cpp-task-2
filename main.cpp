@@ -6,7 +6,9 @@ int main(int argc, char *argv[])
 {
     Window &window = Window::getSingleton(400, 200, "Title");
     window.glutInitWrapper(&argc, argv);
-    window.glutDisplayFrame();
+    while (1) {
+        window.glutDisplayFrame();
+    }
 
     return 0;
 }
