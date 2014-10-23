@@ -40,36 +40,30 @@ Test::Test()
 
     // Announce the start of testing
     std::cout << STYLE_TITLE << padding << prefix << classNameProper << padding << paddingExtra << STYLE_RESET << std::endl;
+    std::cout << std::endl;
 }
 
 Test::~Test()
 {
     // Calculate summary data
-    float total = this->testsPassed + this->testsFailed;
-    float percentGood = (this->testsPassed / total) * 100;
-    float percentBad = (this->testsFailed / total) * 100;
+    int total = this->testsPassed + this->testsFailed;
 
     // Prepare the message
-    std::stringstream successSS;
-    successSS << this->testsPassed << " (" << percentGood << "%)";
-    std::stringstream failureSS;
-    failureSS << "(" << percentBad << "%) " << this->testsFailed;
-    std::string success = successSS.str();
-    std::string failure = failureSS.str();
-    std::string separator = " | ";
+    std::stringstream message;
+    message << this->testsPassed << "/" << total;
 
     // Align it
-    int paddingRoom = LINE_LENGTH - (success.length() + separator.length() + failure.length());
-    int paddingLength = paddingRoom / 2;
-    std::string paddingExtra = "";
-    if (paddingLength*2 < paddingRoom) {
-        paddingExtra = " ";
-    }
+    int paddingLength = LINE_LENGTH - ( + PADDING_LEFT + STATUS_LENGTH);
+    int paddingRightLength = LINE_LENGTH - paddingLength - message.str().length();
     std::string padding = "";
+    std::string paddingRight = "";
     for (int i = 0; i < paddingLength; i++) {
         padding += " ";
     }
-    std::cout << STYLE_FOOTER << padding << STYLE_SUCCESS << success << STYLE_RESET_COLOR << separator << STYLE_FAILURE << failure << STYLE_RESET_COLOR << padding << paddingExtra << STYLE_RESET << std::endl;
+    for (int i = 0; i < paddingRightLength; i++) {
+        paddingRight += " ";
+    }
+    std::cout << STYLE_FOOTER << padding << message.str() << paddingRight << STYLE_RESET << std::endl;
     std::cout << std::endl;
     //std::cout << " + succeeded: " << this->testsPassed << " (" << (this->testsPassed / total) * 100 << "%)" << std::endl;
     //std::cout << " -    failed: " << this->testsFailed << " (" << (this->testsFailed / total) * 100 << "%)" << std::endl;
@@ -79,7 +73,7 @@ Test::~Test()
 void Test::testInterpret()
 {
     // Prepare user message
-    std::string prefix = "* testing ";
+    std::string prefix = "+ ";
     std::string function = this->testingFunctionName;
     std::string status = "none";
     std::string postfix = "()";

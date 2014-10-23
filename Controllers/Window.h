@@ -47,6 +47,8 @@ public:
     char *getTitleCString();
     bool isDisplayLoopActive();
     // Getters glut related
+    int *getGlutArgumentsArgcp();
+    char **getGlutArgumentsArgv();
     GLuint getGlutProgram();
     GLint getGlutCoordinateAttribute();
 

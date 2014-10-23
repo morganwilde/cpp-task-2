@@ -3,8 +3,8 @@ FLAG_DEBUG = -DDEBUG
 CFLAGS = -Wno-deprecated-declarations
 LFLAGS = -framework GLUT -framework OpenGL -framework Cocoa \
 -I/usr/local/include -I/opt/X11/include -I/opt/X11/lib
-PARTS = Controllers/Window.cpp
-TESTS = Tests/Test.cpp Tests/TestWindow.cpp
+PARTS = Controllers/Window.cpp Models/Point.cpp Models/Shape.cpp
+TESTS = Tests/Test.cpp Tests/TestWindow.cpp Tests/TestPoint.cpp
 
 all: main.cpp
 	$(CC) $(FLAG_DEBUG) $(CFLAGS) $(PARTS) main.cpp -o main $(LFLAGS)

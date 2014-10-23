@@ -116,6 +116,14 @@ bool Window::isDisplayLoopActive()
     return this->displayLoopActive;
 }
 // Getters glut related
+int *Window::getGlutArgumentsArgcp()
+{
+    return this->glutArgcp;
+}
+char **Window::getGlutArgumentsArgv()
+{
+    return this->glutArgv;
+}
 GLuint Window::getGlutProgram()
 {
     return this->glutProgram;

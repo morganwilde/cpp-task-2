@@ -10,8 +10,9 @@
 #define STYLE_RESET "\033[0m"
 #define STYLE_RESET_COLOR "\033[0m\033[4m"
 #define LINE_LENGTH 80
-#define PADDING_LEFT 5
-#define PADDING_RIGHT 5
+#define STATUS_LENGTH 9
+#define PADDING_LEFT 2
+#define PADDING_RIGHT 2
 
 #include <iostream>
 #include <sstream>
@@ -23,6 +24,7 @@ private:
     int testsFailed;
     bool testResult;
     std::string testingFunctionName;
+    std::string testingClassName;
 public:
     Test();
     ~Test();
