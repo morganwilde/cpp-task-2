@@ -138,11 +138,12 @@ void Window::glutInitWrapper(int *glutArgcp, char *glutArgv[])
         glutInit(glutArgcp, glutArgv);
         glutInitDisplayMode(GLUT_RGBA|GLUT_DOUBLE|GLUT_DEPTH);
         glutInitWindowSize(this->getWidth(), this->getHeight());
-        std::cout << this->getTitleCString() << std::endl;
         glutCreateWindow(this->getTitleCString());
 
         // Assign callback functions
         glutDisplayFunc(windowDisplay);
+        glutKeyboardFunc(windowKeyboard);
+        glutSpecialFunc(windowKeyboardSpecial);
 
         /*
         // Initialise resources
@@ -239,4 +240,27 @@ void windowDisplay()
 
     // Display result
     glutSwapBuffers();
+}
+
+void windowKeyboard(unsigned char key, int x, int y)
+{
+    Window &window = Window::getSingleton();
+
+    // Interpret the key
+    switch (key) {
+        case 27: // Escape
+            window.setDisplayLoopActive(false);
+            break;
+        default: std::cout << (int)key << std::endl;
+    }
+}
+
+void windowKeyboardSpecial(int key, int x, int y)
+{
+    Window &window = Window::getSingleton();
+
+    // Interpret the key
+    switch (key) {
+        default: std::cout << key << std::endl;
+    }
 }

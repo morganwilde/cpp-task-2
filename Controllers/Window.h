@@ -57,5 +57,7 @@ public:
 };
 
 void windowDisplay();
+void windowKeyboardSpecial(int key, int x, int y);
+void windowKeyboard(unsigned char key, int x, int y);
 
 #endif
