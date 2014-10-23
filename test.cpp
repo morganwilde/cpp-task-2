@@ -1,5 +1,7 @@
 #include "Tests/TestWindow.h"
 #include "Tests/TestPoint.h"
+#include "Tests/TestShape.h"
+#include "Tests/TestShapeTriangle.h"
 
 int main(int argc, char *argv[])
 {
@@ -23,6 +25,20 @@ int main(int argc, char *argv[])
         testPoint.testGetterX();
         testPoint.testGetterY();
         testPoint.testGetterZ();
+        testPoint.testOperatorEqualEqual();
+    }
+    {
+        TestShape testShape;
+        testShape.testConstructor();
+        testShape.testPointCount();
+        testShape.testPushToPointArray();
+        testShape.testPopFromPointArray();
+    }
+    {
+        TestShapeTriangle testShapeTriangle;
+        testShapeTriangle.testConstructor();
+        testShapeTriangle.testPointCount();
+        testShapeTriangle.testPoints();
     }
 
     return 0;

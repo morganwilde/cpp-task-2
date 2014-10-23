@@ -14,6 +14,7 @@ public:
     void testGetterX();
     void testGetterY();
     void testGetterZ();
+    void testOperatorEqualEqual();
 };
 
 #endif

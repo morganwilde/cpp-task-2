@@ -97,3 +97,18 @@ void TestPoint::testGetterZ()
     }
     this->testInterpret();
 }
+
+void TestPoint::testOperatorEqualEqual()
+{
+    this->testInit(__func__);
+    Point a = Point(1, 2, 3);
+    Point b = Point(1, 2, 3);
+    Point c = Point(2, 2, 3);
+    if (a != b) {
+        this->testFailed();
+    }
+    if (a == c) {
+        this->testFailed();
+    }
+    this->testInterpret();
+}

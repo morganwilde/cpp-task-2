@@ -6,12 +6,17 @@
 class Shape
 {
 private:
+    int pointCount;
     Point *pointArray;
 public:
     Shape();
     ~Shape();
-    // Setters
     // Getters
+    int getPointCount();
+    Point *getPointArray();
+    // Point array methods
+    void pushToPointArray(Point point);
+    Point popFromPointArray();
 };
 
 #endif

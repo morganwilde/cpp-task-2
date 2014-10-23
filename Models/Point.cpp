@@ -45,3 +45,24 @@ double Point::getZ()
 {
     return this->z;
 }
+// Operators
+
+bool Point::operator==(const Point &pointForComparison)
+{
+    bool equal = true;
+    if (this->getX() != pointForComparison.getX()) {
+        equal = false;
+    }
+    if (this->getY() != pointForComparison.getY()) {
+        equal = false;
+    }
+    if (this->getZ() != pointForComparison.getZ()) {
+        equal = false;
+    }
+    return equal;
+}
+
+bool Point::operator!=(const Point &pointForComparison)
+{
+    return true;
+}

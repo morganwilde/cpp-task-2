@@ -16,9 +16,12 @@ public:
     void setY(double y);
     void setZ(double z);
     // Getters
-    double getX();
-    double getY();
-    double getZ();
+    const double getX();
+    const double getY();
+    const double getZ();
+    // Operators
+    bool operator==(const Point &pointForComparison);
+    bool operator!=(const Point &pointForComparison);
 };
 
 #endif
