@@ -4,13 +4,13 @@ int main(int argc, char *argv[])
 {
     {
         TestWindow testWindow;
-        testWindow.test(&TestWindow::testWindowSingletonCreation);
-        testWindow.test(&TestWindow::testConstructor);
+        testWindow.testWindowSingletonCreation();
+        testWindow.testConstructor();
     } 
     {
         TestWindow testWindow;
-        testWindow.test(&TestWindow::testWindowSingletonCreation);
-        testWindow.test(&TestWindow::testConstructor);
+        testWindow.testWindowSingletonCreation();
+        testWindow.testConstructor();
     } 
 
     return 0;
