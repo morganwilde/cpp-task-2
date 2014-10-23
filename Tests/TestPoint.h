@@ -3,9 +3,10 @@
 
 #include "Test.h"
 
-class TestPoint : public Test
+class TestPoint : protected Test
 {
 public:
+    TestPoint();
     void testConstructor();
     void testSetterX();
     void testSetterY();

@@ -1,6 +1,12 @@
 #include "TestPoint.h"
 #include "../Models/Point.h"
 
+TestPoint::TestPoint()
+{
+    this->testingClassName = "Point";
+    this->init();
+}
+
 void TestPoint::testConstructor()
 {
     this->testInit(__func__);

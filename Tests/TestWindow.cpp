@@ -1,6 +1,12 @@
 #include "TestWindow.h"
 #include "../Controllers/Window.h"
 
+TestWindow::TestWindow()
+{
+    this->testingClassName = "Window";
+    this->init();
+}
+
 void TestWindow::testWindowSingletonCreation()
 {
     this->testInit(__func__);

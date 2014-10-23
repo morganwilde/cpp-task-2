@@ -3,9 +3,10 @@
 
 #include "Test.h"
 
-class TestWindow : public Test
+class TestWindow : protected Test
 {
 public:
+    TestWindow();
     void testWindowSingletonCreation();
     void testConstructor();
     void testSetterWidth();

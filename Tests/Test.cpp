@@ -1,32 +1,14 @@
 #include "Test.h"
 
-Test::Test()
+void Test::init()
 {
     this->testsPassed = 0;
     this->testsFailed = 0;
     this->testingFunctionName = "";
 
-    // Convert compiler formatted class name to the original
-    std::string prefix = "Unit testing class ";
-    std::string className = typeid(this).name();
-    std::string classNameProper = "";
-    bool numbers = false;
-    bool proper = false;
-    for (int i = 0; i < className.length(); i++) {
-        // Loop char by char and remove prefix, usually "P10ClassName"
-        if (isdigit(className[i])) {
-            numbers = true;
-        }
-        if (!isdigit(className[i]) && numbers && !proper) {
-            proper = true;
-        }
-        if (proper) {
-            classNameProper += className[i];
-        }
-    }
-
     // Calculate necessary paddings to center the title
-    int titleLength = prefix.length() + classNameProper.length();
+    std::string className = "  " + this->testingClassName + "  ";
+    int titleLength = className.length();
     int paddingAvailable = LINE_LENGTH - titleLength;
     int paddingLength = paddingAvailable / 2;
     std::string padding = "";
@@ -34,13 +16,21 @@ Test::Test()
         padding += " ";
     }
     std::string paddingExtra = "";
-    if (paddingLength*2 < LINE_LENGTH) {
+    if ((paddingLength*2 + titleLength) < LINE_LENGTH) {
         paddingExtra = " ";
     }
 
     // Announce the start of testing
-    std::cout << STYLE_TITLE << padding << prefix << classNameProper << padding << paddingExtra << STYLE_RESET << std::endl;
+    std::cout
+        << STYLE_TITLE << padding 
+        << STYLE_RESET << STYLE_TITLE_FONT << className 
+        << STYLE_RESET_COLOR << padding << paddingExtra 
+        << STYLE_RESET << std::endl;
     std::cout << std::endl;
+}
+
+Test::Test()
+{
 }
 
 Test::~Test()
@@ -65,11 +55,8 @@ Test::~Test()
     }
     std::cout << STYLE_FOOTER << padding << message.str() << paddingRight << STYLE_RESET << std::endl;
     std::cout << std::endl;
-    //std::cout << " + succeeded: " << this->testsPassed << " (" << (this->testsPassed / total) * 100 << "%)" << std::endl;
-    //std::cout << " -    failed: " << this->testsFailed << " (" << (this->testsFailed / total) * 100 << "%)" << std::endl;
 }
 
-//void Test::test(bool (Test::*testMethod)(void))
 void Test::testInterpret()
 {
     // Prepare user message
