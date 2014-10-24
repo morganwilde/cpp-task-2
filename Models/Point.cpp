@@ -33,15 +33,15 @@ void Point::setZ(double z)
     this->z = z;
 }
 // Getters
-double Point::getX()
+double Point::getX() const
 {
     return this->x;
 }
-double Point::getY()
+double Point::getY() const
 {
     return this->y;
 }
-double Point::getZ()
+double Point::getZ() const
 {
     return this->z;
 }
@@ -64,5 +64,21 @@ bool Point::operator==(const Point &pointForComparison)
 
 bool Point::operator!=(const Point &pointForComparison)
 {
-    return true;
+    bool equal = true;
+    if (this->getX() != pointForComparison.getX()) {
+        equal = false;
+    }
+    if (this->getY() != pointForComparison.getY()) {
+        equal = false;
+    }
+    if (this->getZ() != pointForComparison.getZ()) {
+        equal = false;
+    }
+    return !equal;
+}
+
+std::ostream& operator<<(std::ostream &stream, const Point &point)
+{
+    stream << "Point(" << point.getX() << ", " << point.getY() << ", " << point.getZ() << ")";
+    return stream;
 }

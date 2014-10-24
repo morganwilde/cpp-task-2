@@ -1,6 +1,8 @@
 #ifndef POINT_H
 #define POINT_H
 
+#include <iostream>
+
 class Point
 {
 private:
@@ -16,12 +18,13 @@ public:
     void setY(double y);
     void setZ(double z);
     // Getters
-    const double getX();
-    const double getY();
-    const double getZ();
+    double getX() const;
+    double getY() const;
+    double getZ() const;
     // Operators
     bool operator==(const Point &pointForComparison);
     bool operator!=(const Point &pointForComparison);
+    friend std::ostream& operator<<(std::ostream &stream, const Point &point);
 };
 
 #endif

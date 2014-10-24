@@ -153,11 +153,10 @@ void Window::glutInitWrapper(int *glutArgcp, char *glutArgv[])
         glutKeyboardFunc(windowKeyboard);
         glutSpecialFunc(windowKeyboardSpecial);
 
-        /*
+        // == TEMP ==
         // Initialise resources
         GLint linkError = GL_FALSE;
-        window.glutProgram = glCreateProgram();
-        std::cout << "window.glutProgram: " << window.glutProgram << std::endl;
+        this->glutProgram = glCreateProgram();
 
         // Shaders
         GLuint vs = glCreateShader(GL_VERTEX_SHADER);
@@ -184,20 +183,20 @@ void Window::glutInitWrapper(int *glutArgcp, char *glutArgv[])
         glCompileShader(fs);
         GLint compileError = GL_FALSE;
         glGetShaderiv(vs, GL_COMPILE_STATUS, &compileError);
-        std::cout << "vs: " << vs << " compile: " << compileError << std::endl;
+        //std::cout << "vs: " << vs << " compile: " << compileError << std::endl;
         glGetShaderiv(fs, GL_COMPILE_STATUS, &compileError);
-        std::cout << "fs: " << fs << " compile: " << compileError << std::endl;
+        //std::cout << "fs: " << fs << " compile: " << compileError << std::endl;
 
         // Link resources
-        glAttachShader(window.glutProgram, vs);
-        glAttachShader(window.glutProgram, fs);
-        glLinkProgram(window.glutProgram);
-        glGetProgramiv(window.glutProgram, GL_LINK_STATUS, &linkError);
-        glGetProgramiv(window.glutProgram, GL_ATTACHED_SHADERS, &linkError);
-        std::cout << "active attributes: " << linkError << std::endl;
+        glAttachShader(this->getGlutProgram(), vs);
+        glAttachShader(this->getGlutProgram(), fs);
+        glLinkProgram(this->getGlutProgram());
+        glGetProgramiv(this->getGlutProgram(), GL_LINK_STATUS, &linkError);
+        glGetProgramiv(this->getGlutProgram(), GL_ATTACHED_SHADERS, &linkError);
+        //std::cout << "active attributes: " << linkError << std::endl;
 
-        window.setGlutCoordinateAttribute("coord3d");
-        */
+        this->setGlutCoordinateAttribute("coord3d");
+        // /= TEMP ==
     }
 }
 void Window::glutDisplayFrame()
@@ -220,13 +219,12 @@ void windowDisplay()
     glClear(GL_COLOR_BUFFER_BIT);
     
     // Use program
-    //Window &window = Window::getSingleton();
-    //glUseProgram(window.getGlutProgram());
+    Window &window = Window::getSingleton();
+    glUseProgram(window.getGlutProgram());
 
     // Temp
-    /*
     glEnableVertexAttribArray(window.getGlutCoordinateAttribute());
-    GLfloat a = 0.4;
+    GLfloat a = 0.9;
     GLfloat vertices[] = {
         -a, a,
         a, a,
@@ -244,7 +242,6 @@ void windowDisplay()
     glDrawArrays(GL_TRIANGLES, 0, 3);
     glDisableVertexAttribArray(window.getGlutCoordinateAttribute());
     // /Temp
-    */
 
     // Display result
     glutSwapBuffers();

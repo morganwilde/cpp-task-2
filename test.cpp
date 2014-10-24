@@ -2,6 +2,7 @@
 #include "Tests/TestPoint.h"
 #include "Tests/TestShape.h"
 #include "Tests/TestShapeTriangle.h"
+#include "Tests/TestShapesArray.h"
 
 int main(int argc, char *argv[])
 {
@@ -26,6 +27,7 @@ int main(int argc, char *argv[])
         testPoint.testGetterY();
         testPoint.testGetterZ();
         testPoint.testOperatorEqualEqual();
+        testPoint.testOperatorNotEqual();
     }
     {
         TestShape testShape;
@@ -39,6 +41,11 @@ int main(int argc, char *argv[])
         testShapeTriangle.testConstructor();
         testShapeTriangle.testPointCount();
         testShapeTriangle.testPoints();
+    }
+    {
+        TestShapesArray testShapesArray;
+        testShapesArray.testConstructor();
+        testShapesArray.testShapeCount();
     }
 
     return 0;

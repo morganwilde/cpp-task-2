@@ -104,10 +104,25 @@ void TestPoint::testOperatorEqualEqual()
     Point a = Point(1, 2, 3);
     Point b = Point(1, 2, 3);
     Point c = Point(2, 2, 3);
-    if (a != b) {
+    if (!(a == b)) {
         this->testFailed();
     }
     if (a == c) {
+        this->testFailed();
+    }
+    this->testInterpret();
+}
+
+void TestPoint::testOperatorNotEqual()
+{
+    this->testInit(__func__);
+    Point a = Point(1, 2, 3);
+    Point b = Point(1, 2, 3);
+    Point c = Point(2, 2, 3);
+    if (a != b) {
+        this->testFailed();
+    }
+    if (!(a != c)) {
         this->testFailed();
     }
     this->testInterpret();

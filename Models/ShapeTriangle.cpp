@@ -10,12 +10,12 @@ ShapeTriangle::ShapeTriangle(Point origin, double width, double height)
     this->setHeight(height);
 
     // Create necessary points
-    Point top = Point(origin.getX(), origin.getY(), origin.getZ());
-    Point right = Point(origin.getX(), origin.getY(), origin.getZ());
+    Point top = Point(origin.getX(), origin.getY() + this->getHeight(), origin.getZ());
+    Point right = Point(origin.getX() + this->getWidth(), origin.getY(), origin.getZ());
     
     // Add them to the point array
-    this->pushToPointArray(top);
     this->pushToPointArray(origin);
+    this->pushToPointArray(top);
     this->pushToPointArray(right);
 }
 
