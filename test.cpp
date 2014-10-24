@@ -46,6 +46,9 @@ int main(int argc, char *argv[])
         TestShapesArray testShapesArray;
         testShapesArray.testConstructor();
         testShapesArray.testShapeCount();
+        testShapesArray.testShapeAdd();
+        testShapesArray.testVertexCount();
+        testShapesArray.testVertexArray();
     }
 
     return 0;

@@ -9,6 +9,9 @@ public:
     TestShapesArray();
     void testConstructor();
     void testShapeCount();
+    void testShapeAdd();
+    void testVertexCount();
+    void testVertexArray();
 };
 
 #endif

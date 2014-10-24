@@ -56,10 +56,12 @@ Window &Window::getSingleton(int width, int height, std::string title)
 void Window::setWidth(int width)
 {
     this->width = width;
+    this->shapesArray.setWindowSize(this->getWidth(), this->getHeight());
 }
 void Window::setHeight(int height)
 {
     this->height = height;
+    this->shapesArray.setWindowSize(this->getWidth(), this->getHeight());
 }
 void Window::setTitle(std::string title)
 {
@@ -226,20 +228,25 @@ void windowDisplay()
     glEnableVertexAttribArray(window.getGlutCoordinateAttribute());
     GLfloat a = 0.9;
     GLfloat vertices[] = {
-        -a, a,
-        a, a,
-        a, -a,
+        0, 0, 0,
+        0, 1, 0,
+        1, 0, 0
     };
     //std::cout << window.getGlutCoordinateAttribute() << std::endl;
+    GLfloat *vertexArray = window.shapesArray.getVertexArray();
+    int components = 3;
+    int points = window.shapesArray.getVertexCount() / components;
+
     glVertexAttribPointer(
         window.getGlutCoordinateAttribute(),
-        2,
+        components, // TODO change this to a dynamic getter
         GL_FLOAT,
         GL_FALSE,
         0,
-        vertices
+        vertexArray
+        //vertices
     );
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawArrays(GL_TRIANGLES, 0, points);
     glDisableVertexAttribArray(window.getGlutCoordinateAttribute());
     // /Temp
 

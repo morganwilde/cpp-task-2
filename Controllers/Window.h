@@ -6,6 +6,8 @@
 #include <GLUT/glut.h>
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
+// Models
+#include "../Models/ShapesArray.h"
 
 class Window
 {
@@ -32,6 +34,8 @@ public:
     ~Window();
     static Window &getSingleton();
     static Window &getSingleton(int width, int height, std::string title);
+    // Public properties
+    ShapesArray shapesArray;
     // Setters
     void setWidth(int width);
     void setHeight(int height);

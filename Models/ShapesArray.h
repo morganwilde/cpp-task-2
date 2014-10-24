@@ -2,18 +2,29 @@
 #define SHAPESARRAY_H
 
 #include "Shape.h"
+#include <OpenGL/gl.h>
 
 class ShapesArray
 {
 private:
     int shapeCount;
-    Shape *array;
+    Shape **array;
+    int vertexCount;
+    // Window size
+    int width;
+    int height;
 public:
     ShapesArray();
     ~ShapesArray();
+    // Setters
+    void setWindowSize(int width, int height);
     // Getters
     int getShapeCount();
-    Shape *getShapeArray();
+    Shape **getShapeArray();
+    GLfloat *getVertexArray();
+    int getVertexCount();
+    // Array managers
+    void add(Shape *shape);
 };
 
 #endif

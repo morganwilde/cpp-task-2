@@ -9,16 +9,20 @@ Shape::Shape()
 
 Shape::~Shape()
 {
-    free(this->pointArray);
-    this->pointArray = NULL;
+    try {
+        free(this->pointArray);
+        this->pointArray = NULL;
+    } catch(...) {
+        std::cout << "Trying to free Shape failed!" << std::endl;
+    }
 }
 
-int Shape::getPointCount()
+int Shape::getPointCount() const
 {
     return this->pointCount;
 }
 
-Point *Shape::getPointArray()
+Point *Shape::getPointArray() const
 {
     return this->pointArray;
 }
@@ -36,4 +40,24 @@ Point Shape::popFromPointArray()
     this->pointCount--;
     this->pointArray = (Point *)realloc(this->pointArray, sizeof(Point) * this->pointCount);
     return point;
+}
+
+bool Shape::operator==(const Shape &shapeForComparison)
+{
+    bool equal = true;
+    if (this->getPointCount() != shapeForComparison.getPointCount()) {
+        equal = false;
+    } else {
+        for (int i = 0; i < this->getPointCount(); i++) {
+            if (this->getPointArray()[i] != shapeForComparison.getPointArray()[i]) {
+                equal = false;
+            }
+        }
+    }
+    return equal;
+}
+
+bool Shape::operator!=(const Shape &shapeForComparison)
+{
+    return !(*this == shapeForComparison);
 }
