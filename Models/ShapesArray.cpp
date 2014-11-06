@@ -48,8 +48,8 @@ GLfloat *ShapesArray::getVertexArray()
             //std::cout << point << std::endl;
             count += 3;
             // Translate values
-            GLfloat x = (GLfloat)(point.getX() / (this->width/2.0));
-            GLfloat y = (GLfloat)(point.getY() / (this->height/2.0));
+            GLfloat x = (GLfloat)(point.getX() / (this->width/2.0)) - 1;
+            GLfloat y = (GLfloat)(point.getY() / (this->height/2.0)) - 1;
             GLfloat z = (GLfloat)(point.getZ());
             vertexArray = (GLfloat *)realloc(vertexArray, count * sizeof(GLfloat));
             vertexArray[count - 3] = x;
@@ -71,6 +71,20 @@ GLfloat *ShapesArray::getVertexArray()
 int ShapesArray::getVertexCount()
 {
     return this->vertexCount;
+}
+
+Shape *ShapesArray::shapeContaining(Point point)
+{
+    Shape *shape = nullptr;
+
+    for (int i = 0; i < this->shapeCount; i++) {
+        Shape *tester = this->getShapeArray()[0];
+        if (tester->contains(point)) {
+            shape = tester;
+        }
+    }
+
+    return shape;
 }
 
 // Array managers

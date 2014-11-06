@@ -8,6 +8,7 @@
 #include <OpenGL/glu.h>
 // Models
 #include "../Models/ShapesArray.h"
+#include "../Models/Shape.h"
 
 class Window
 {
@@ -21,6 +22,7 @@ private:
     int height;
     std::string title;
     char *titleCString;
+    Shape *activeShape;
     // Glut related properties
     bool glutInitialised;
     int *glutArgcp;
@@ -41,6 +43,7 @@ public:
     void setHeight(int height);
     void setTitle(std::string title);
     void setDisplayLoopActive(bool isActive);
+    void setActiveShape(Shape *shape);
     // Setters glut related
     void setGlutArguments(int *glutArgcp, char **glutArgv);
     void setGlutCoordinateAttribute(const char *name);
@@ -50,6 +53,7 @@ public:
     std::string getTitle();
     char *getTitleCString();
     bool isDisplayLoopActive();
+    Shape *getActiveShape();
     // Getters glut related
     int *getGlutArgumentsArgcp();
     char **getGlutArgumentsArgv();
@@ -65,5 +69,8 @@ public:
 void windowDisplay();
 void windowKeyboardSpecial(int key, int x, int y);
 void windowKeyboard(unsigned char key, int x, int y);
+void windowMouseMove(int x, int y);
+void windowMouseButton(int button, int state, int x, int y);
+void windowMouseDownMove(int x, int y);
 
 #endif

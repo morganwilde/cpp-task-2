@@ -23,6 +23,7 @@ public:
     Shape **getShapeArray();
     GLfloat *getVertexArray();
     int getVertexCount();
+    Shape *shapeContaining(Point point);
     // Array managers
     void add(Shape *shape);
 };

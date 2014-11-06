@@ -64,21 +64,40 @@ bool Point::operator==(const Point &pointForComparison)
 
 bool Point::operator!=(const Point &pointForComparison)
 {
-    bool equal = true;
-    if (this->getX() != pointForComparison.getX()) {
-        equal = false;
-    }
-    if (this->getY() != pointForComparison.getY()) {
-        equal = false;
-    }
-    if (this->getZ() != pointForComparison.getZ()) {
-        equal = false;
-    }
-    return !equal;
+    return !(*this == pointForComparison);
 }
 
 std::ostream& operator<<(std::ostream &stream, const Point &point)
 {
-    stream << "Point(" << point.getX() << ", " << point.getY() << ", " << point.getZ() << ")";
+    stream << "Point( " << point.getX() << " , " << point.getY() << " , " << point.getZ() << " )";
+    return stream;
+}
+
+std::istream& operator>>(std::istream &stream, Point &point)
+{
+    std::string prefix = "";
+    std::string separator = "";
+    std::string postfix = "";
+    double inX = 0;
+    double inY = 0;
+    double inZ = 0;
+
+    stream >> prefix;
+    if (prefix == "Point(") {
+        stream >> inX;
+    }
+    stream >> separator;
+    if (separator == ",") {
+        stream >> inY;
+    }
+    stream >> separator;
+    if (separator == ",") {
+        stream >> inZ;
+    }
+
+    point.setX(inX);
+    point.setY(inY);
+    point.setZ(inZ);
+
     return stream;
 }

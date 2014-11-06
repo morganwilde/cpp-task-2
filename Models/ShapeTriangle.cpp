@@ -1,6 +1,5 @@
 #include "ShapeTriangle.h"
 
-
 ShapeTriangle::ShapeTriangle(Point origin, double width, double height)
 {
     Shape::Shape();

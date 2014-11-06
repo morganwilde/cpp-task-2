@@ -1,11 +1,13 @@
 #include "Window.h"
-#include <iostream>
+#include "Logger.h"
 
 Window::Window()
 {
     // Bare constructor
     #ifdef DEBUG
-    std::cout << "Window created   -> " << this << std::endl;
+    Logger logger("log.out");
+    logger.stream << "Window created   -> " << this << std::endl;
+    logger.log();
     #endif
 }
 
@@ -13,7 +15,9 @@ Window::Window(Window const &windowCopy)
 {
     // Copy constructor
     #ifdef DEBUG
-    std::cout << "Window copied    -> " << this << " <- from " << &windowCopy << std::endl;
+    Logger logger("log.out");
+    logger.stream << "Window copied    -> " << this << " <- from " << &windowCopy << std::endl;
+    logger.log();
     #endif
 }
 
@@ -21,14 +25,18 @@ void Window::operator=(Window const &windowRight)
 {
     // Assignment constructor
     #ifdef DEBUG
-    std::cout << "Window assigned  -> " << this << " <- from " << &windowRight << std::endl;
+    Logger logger("log.out");
+    logger.stream << "Window assigned  -> " << this << " <- from " << &windowRight << std::endl;
+    logger.log();
     #endif
 }
 
 Window::~Window()
 {
     #ifdef DEBUG
-    std::cout << "Window destroyed -> " << this << std::endl;
+    Logger logger("log.out");
+    logger.stream << "Window destroyed -> " << this << std::endl;
+    logger.log();
     #endif
     // Clean up
     free(this->getTitleCString());
@@ -154,6 +162,9 @@ void Window::glutInitWrapper(int *glutArgcp, char *glutArgv[])
         glutDisplayFunc(windowDisplay);
         glutKeyboardFunc(windowKeyboard);
         glutSpecialFunc(windowKeyboardSpecial);
+        glutMouseFunc(windowMouseButton);
+        glutMotionFunc(windowMouseDownMove);
+        glutPassiveMotionFunc(windowMouseMove);
 
         // == TEMP ==
         // Initialise resources
@@ -174,9 +185,9 @@ void Window::glutInitWrapper(int *glutArgcp, char *glutArgv[])
         const char *fsSource =
             "#version 120\n"
             "void main(void) {\n"
-            "    gl_FragColor[0] = 0.2;\n"
-            "    gl_FragColor[1] = 0.2;\n"
-            "    gl_FragColor[2] = 0.2;\n"
+            "    gl_FragColor[0] = 0.5;\n"
+            "    gl_FragColor[1] = 0.5;\n"
+            "    gl_FragColor[2] = 0.5;\n"
             "}";
 
         glShaderSource(vs, 1, &vsSource, NULL);
@@ -217,7 +228,7 @@ void Window::glutDisplayLoop()
 void windowDisplay()
 {
     // Clear background to white
-    glClearColor(1.0, 0.5, 1.0, 1.0);
+    glClearColor(1.0, 1.0, 1.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
     
     // Use program
@@ -226,13 +237,6 @@ void windowDisplay()
 
     // Temp
     glEnableVertexAttribArray(window.getGlutCoordinateAttribute());
-    GLfloat a = 0.9;
-    GLfloat vertices[] = {
-        0, 0, 0,
-        0, 1, 0,
-        1, 0, 0
-    };
-    //std::cout << window.getGlutCoordinateAttribute() << std::endl;
     GLfloat *vertexArray = window.shapesArray.getVertexArray();
     int components = 3;
     int points = window.shapesArray.getVertexCount() / components;
@@ -275,4 +279,22 @@ void windowKeyboardSpecial(int key, int x, int y)
     switch (key) {
         default: std::cout << key << std::endl;
     }
+}
+
+void windowMouseMove(int x, int y)
+{
+    //std::cout << x << ", " << y << std::endl;
+}
+
+void windowMouseButton(int button, int state, int x, int y)
+{
+    Window &window = Window::getSingleton();
+    Shape *shape = window.shapesArray.shapeContaining(Point(x, y, 0));
+    //std::cout << shape << std::endl;
+    //std::cout << button << ":" << state << " " << x << ", " << y << std::endl;
+}
+
+void windowMouseDownMove(int x, int y)
+{
+    //std::cout << x << ", " << y << std::endl;
 }

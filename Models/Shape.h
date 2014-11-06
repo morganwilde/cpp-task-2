@@ -17,6 +17,8 @@ public:
     // Point array methods
     void pushToPointArray(Point point);
     Point popFromPointArray();
+    // Analysis
+    bool contains(Point point);
     // Operators
     bool operator==(const Shape &shapeForComparison);
     bool operator!=(const Shape &shapeForComparison);

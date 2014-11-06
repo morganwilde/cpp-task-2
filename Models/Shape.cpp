@@ -42,6 +42,24 @@ Point Shape::popFromPointArray()
     return point;
 }
 
+// Analysis
+bool Shape::contains(Point point)
+{
+    bool containsPoint = false;
+    int secondToLastPoint = this->pointCount - 1;
+    Point p1;
+    Point p2;
+    int verticalHits = 0;
+    int horizontalHits = 0;
+
+    for (int i = 0; i < secondToLastPoint; i++) {
+        // Define a function with this slope and test if the result with one component is greate or smaller than the coordinates of this point
+        p1 = this->getPointArray()[i];
+        p2 = this->getPointArray()[i + 1];
+    }
+    return containsPoint;
+}
+
 bool Shape::operator==(const Shape &shapeForComparison)
 {
     bool equal = true;

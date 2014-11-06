@@ -8,7 +8,9 @@ PARTS = Controllers/Window.cpp \
 Models/Point.cpp \
 Models/Shape.cpp \
 Models/ShapeTriangle.cpp \
-Models/ShapesArray.cpp
+Models/ShapeRectangle.cpp \
+Models/ShapesArray.cpp \
+Controllers/Logger.cpp
 
 TESTS = Tests/Test.cpp \
 Tests/TestWindow.cpp \
@@ -26,3 +28,6 @@ test: test.cpp
 	$(CC) $(CFLAGS) $(PARTS) $(TESTS) test.cpp -o test $(LFLAGS)
 	./test
 	rm test
+
+comp: main.cpp
+	$(CC) $(FLAG_DEBUG) $(CFLAGS) $(PARTS) main.cpp -o main $(LFLAGS)
