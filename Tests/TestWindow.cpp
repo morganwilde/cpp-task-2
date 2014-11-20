@@ -95,6 +95,7 @@ void TestWindow::testSetterDisplayLoop()
     }
     this->testInterpret();
 }
+/*
 void TestWindow::testSetterGlutArguments()
 {
     this->testInit(__func__);
@@ -126,3 +127,4 @@ void TestWindow::testSetterGlutArguments()
 
     this->testInterpret();
 }
+*/

@@ -17,20 +17,10 @@ private:
     Window();
     void operator=(Window const &windowRight);
     Window(Window const &windowCopy);
-    // Properties
-    int width;
-    int height;
-    std::string title;
-    char *titleCString;
-    Shape *activeShape;
-    // Glut related properties
-    bool glutInitialised;
-    int *glutArgcp;
-    char **glutArgv;
-    GLuint glutProgram;
-    GLint glutCoordinateAttribute;
-    // Flags
-    bool displayLoopActive;
+
+    // Hide implementation details
+    class Implementation;
+    Implementation *implementation;
 
 public:
     ~Window();
@@ -44,9 +34,6 @@ public:
     void setTitle(std::string title);
     void setDisplayLoopActive(bool isActive);
     void setActiveShape(Shape *shape);
-    // Setters glut related
-    void setGlutArguments(int *glutArgcp, char **glutArgv);
-    void setGlutCoordinateAttribute(const char *name);
     // Getters
     int getWidth();
     int getHeight();
@@ -55,10 +42,9 @@ public:
     bool isDisplayLoopActive();
     Shape *getActiveShape();
     // Getters glut related
-    int *getGlutArgumentsArgcp();
-    char **getGlutArgumentsArgv();
     GLuint getGlutProgram();
     GLint getGlutCoordinateAttribute();
+    GLint getGlutColorAttribute();
 
     // Glut wrapper methods
     void glutInitWrapper(int *glutArgcp, char *glutArgv[]);

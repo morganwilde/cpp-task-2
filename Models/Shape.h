@@ -2,6 +2,7 @@
 #define SHAPE_H
 
 #include "Point.h"
+#include "Color.h"
 
 class Shape
 {
@@ -9,6 +10,9 @@ private:
     int pointCount;
     Point *pointArray;
 public:
+    // Public properties
+    Color color;
+    // Constructors & destructors
     Shape();
     ~Shape();
     // Getters

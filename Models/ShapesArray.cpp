@@ -68,6 +68,27 @@ GLfloat *ShapesArray::getVertexArray()
     return vertexArray;
 }
 
+GLfloat *ShapesArray::getColorArray()
+{
+    int count = 0;
+    GLfloat *colorArray = (GLfloat *)malloc(count * sizeof(GLfloat));
+
+    for (int i = 0; i < this->getShapeCount(); i++) {
+        Shape *shape = this->getShapeArray()[i];
+        Point *points = shape->getPointArray();
+        for (int j = 0; j < shape->getPointCount(); j++) {
+            count += 4;
+            colorArray = (GLfloat *)realloc(colorArray, count * sizeof(GLfloat));
+            colorArray[count - 4] = (GLfloat)shape->color.getRed();
+            colorArray[count - 3] = (GLfloat)shape->color.getGreen();
+            colorArray[count - 2] = (GLfloat)shape->color.getBlue();
+            colorArray[count - 1] = (GLfloat)shape->color.getAlpha();
+        }
+    }
+
+    return colorArray;
+}
+
 int ShapesArray::getVertexCount()
 {
     return this->vertexCount;

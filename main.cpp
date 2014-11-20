@@ -15,16 +15,14 @@ int main(int argc, char *argv[])
     ShapeRectangle *rect1       = new ShapeRectangle(Point(0, 0, 0), 200, 200);
     ShapeRectangle *line        = new ShapeRectangle(Point(400, 0, 0), 20, 600);
 
+    // Add color
+    triangle1->color = Color(1, 0, 0, 1);
+    rect1->color = Color(0, 1, 0, 1);
+    line->color = Color(0, 0, 1, 1);
+
     window.shapesArray.add(triangle1);
     window.shapesArray.add(rect1);
     window.shapesArray.add(line);
-
-    /*
-    Point p(1, 2, 3);
-    std::cout << p << std::endl;
-    std::cin >> p;
-    std::cout << p << std::endl;
-    */
 
     window.glutDisplayLoop();
 

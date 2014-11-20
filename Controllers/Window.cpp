@@ -1,7 +1,70 @@
 #include "Window.h"
 #include "Logger.h"
 
-Window::Window()
+/*
+ * Hidden implementation [start]
+ */
+
+class Window::Implementation {
+    friend class Window;
+    // Properties
+    int width;
+    int height;
+    std::string title;
+    char *titleCString;
+    Shape *activeShape;
+
+    // Glut related properties
+    bool glutInitialised;
+    int *glutArgcp;
+    char **glutArgv;
+    GLuint glutProgram;
+    GLint glutCoordinateAttribute;
+    GLint glutColorAttribute;
+
+    // Flags
+    bool displayLoopActive;
+
+    // Setters glut related
+    void setGlutArguments(int *glutArgcp, char **glutArgv);
+    void setGlutCoordinateAttribute(const char *name);
+    void setGlutColorAttribute(const char *name);
+
+    // Getters glut related
+    int *getGlutArgumentsArgcp();
+    char **getGlutArgumentsArgv();
+};
+
+// Setters glut related
+void Window::Implementation::setGlutArguments(int *glutArgcp, char **glutArgv)
+{
+    this->glutArgcp = glutArgcp;
+    this->glutArgv  = glutArgv;
+}
+void Window::Implementation::setGlutCoordinateAttribute(const char *name)
+{
+    this->glutCoordinateAttribute = glGetAttribLocation(this->glutProgram, name);
+}
+void Window::Implementation::setGlutColorAttribute(const char *name)
+{
+    this->glutColorAttribute = glGetAttribLocation(this->glutProgram, name);
+}
+
+// Getters glut related
+int *Window::Implementation::getGlutArgumentsArgcp()
+{
+    return this->glutArgcp;
+}
+char **Window::Implementation::getGlutArgumentsArgv()
+{
+    return this->glutArgv;
+}
+
+/*
+ * Hidden implementation [end]
+ */
+
+Window::Window() : implementation(new Window::Implementation())
 {
     // Bare constructor
     #ifdef DEBUG
@@ -40,6 +103,7 @@ Window::~Window()
     #endif
     // Clean up
     free(this->getTitleCString());
+    delete implementation;
 }
 
 // Singleton creator/getter
@@ -63,93 +127,80 @@ Window &Window::getSingleton(int width, int height, std::string title)
 // Setters
 void Window::setWidth(int width)
 {
-    this->width = width;
+    this->implementation->width = width;
     this->shapesArray.setWindowSize(this->getWidth(), this->getHeight());
 }
 void Window::setHeight(int height)
 {
-    this->height = height;
+    this->implementation->height = height;
     this->shapesArray.setWindowSize(this->getWidth(), this->getHeight());
 }
 void Window::setTitle(std::string title)
 {
     // C++ string title
-    this->title = title;
+    this->implementation->title = title;
     // C string title
     const char *temp = title.c_str();
     const int size = title.size() + 1;
     // allocate room for it
-    if (!this->titleCString) {
-        this->titleCString = (char *)malloc(sizeof(char) * size);
+    if (!this->implementation->titleCString) {
+        this->implementation->titleCString = (char *)malloc(sizeof(char) * size);
     } else {
-        this->titleCString = (char *)realloc(this->titleCString, sizeof(char) * size);
+        this->implementation->titleCString = (char *)realloc(this->implementation->titleCString, sizeof(char) * size);
     }
     // copy char by char
     for (int i = 0; i < size; i++) {
-        this->titleCString[i] = temp[i];
+        this->implementation->titleCString[i] = temp[i];
     }
 }
 void Window::setDisplayLoopActive(bool isActive)
 {
-    this->displayLoopActive = isActive;
+    this->implementation->displayLoopActive = isActive;
 }
-// Setters glut related
-void Window::setGlutArguments(int *glutArgcp, char **glutArgv)
-{
-    this->glutArgcp = glutArgcp;
-    this->glutArgv  = glutArgv;
-}
-void Window::setGlutCoordinateAttribute(const char *name)
-{
-    this->glutCoordinateAttribute = glGetAttribLocation(this->getGlutProgram(), name);
-}
+
 
 // Getters
 int Window::getWidth()
 {
-    return this->width;
+    return this->implementation->width;
 }
 int Window::getHeight()
 {
-    return this->height;
+    return this->implementation->height;
 }
 std::string Window::getTitle()
 {
-    return this->title;
+    return this->implementation->title;
 }
 char *Window::getTitleCString()
 {
-    return this->titleCString;
+    return this->implementation->titleCString;
 }
 bool Window::isDisplayLoopActive()
 {
-    return this->displayLoopActive;
+    return this->implementation->displayLoopActive;
 }
 // Getters glut related
-int *Window::getGlutArgumentsArgcp()
-{
-    return this->glutArgcp;
-}
-char **Window::getGlutArgumentsArgv()
-{
-    return this->glutArgv;
-}
 GLuint Window::getGlutProgram()
 {
-    return this->glutProgram;
+    return this->implementation->glutProgram;
 }
 GLint Window::getGlutCoordinateAttribute()
 {
-    return this->glutCoordinateAttribute;
+    return this->implementation->glutCoordinateAttribute;
+}
+GLint Window::getGlutColorAttribute()
+{
+    return this->implementation->glutColorAttribute;
 }
 
 // Glut wrapper methods
 void Window::glutInitWrapper(int *glutArgcp, char *glutArgv[])
 {
-    if (!this->glutInitialised) {
+    if (!this->implementation->glutInitialised) {
         // Save object state
-        this->setGlutArguments(glutArgcp, glutArgv);
-        this->glutInitialised = true;
+        this->implementation->setGlutArguments(glutArgcp, glutArgv);
+        this->implementation->glutInitialised = true;
         this->setDisplayLoopActive(true);
         
         // Initialise glut
@@ -169,7 +220,7 @@ void Window::glutInitWrapper(int *glutArgcp, char *glutArgv[])
         // == TEMP ==
         // Initialise resources
         GLint linkError = GL_FALSE;
-        this->glutProgram = glCreateProgram();
+        this->implementation->glutProgram = glCreateProgram();
 
         // Shaders
         GLuint vs = glCreateShader(GL_VERTEX_SHADER);
@@ -178,16 +229,23 @@ void Window::glutInitWrapper(int *glutArgcp, char *glutArgv[])
         const char *vsSource =
             "#version 120\n"
             "attribute vec3 coord3d;\n"
+            "attribute vec4 colorrgba;\n"
+            "varying vec4 fragmentColor;\n"
             "void main(void) {\n"
             "    gl_Position = vec4(coord3d, 1.0);\n"
+            "    fragmentColor = colorrgba;\n"
             "}";
         // Fragment shader
         const char *fsSource =
             "#version 120\n"
+            "varying vec4 fragmentColor;\n"
             "void main(void) {\n"
+            "    gl_FragColor = fragmentColor;\n"
+            /*
             "    gl_FragColor[0] = 0.5;\n"
-            "    gl_FragColor[1] = 0.5;\n"
-            "    gl_FragColor[2] = 0.5;\n"
+            "    gl_FragColor[1] = 0.0;\n"
+            "    gl_FragColor[2] = 0.0;\n"
+            */
             "}";
 
         glShaderSource(vs, 1, &vsSource, NULL);
@@ -208,7 +266,10 @@ void Window::glutInitWrapper(int *glutArgcp, char *glutArgv[])
         glGetProgramiv(this->getGlutProgram(), GL_ATTACHED_SHADERS, &linkError);
         //std::cout << "active attributes: " << linkError << std::endl;
 
-        this->setGlutCoordinateAttribute("coord3d");
+        this->implementation->setGlutCoordinateAttribute("coord3d");
+        std::cout << this->implementation->glutColorAttribute << std::endl;
+        this->implementation->setGlutColorAttribute("colorrgba");
+        std::cout << this->implementation->glutColorAttribute << std::endl;
         // /= TEMP ==
     }
 }
@@ -250,9 +311,27 @@ void windowDisplay()
         vertexArray
         //vertices
     );
-    glDrawArrays(GL_TRIANGLES, 0, points);
-    glDisableVertexAttribArray(window.getGlutCoordinateAttribute());
     // /Temp
+
+    // Color
+    glEnableVertexAttribArray(window.getGlutColorAttribute());
+    GLfloat *colorArray = window.shapesArray.getColorArray();
+    int componentsColor = 4;
+
+    glVertexAttribPointer(
+        window.getGlutColorAttribute(),
+        componentsColor,
+        GL_FLOAT,
+        GL_FALSE,
+        0,
+        colorArray
+    );
+
+    glDrawArrays(GL_TRIANGLES, 0, points);
+    glDisableVertexAttribArray(window.getGlutColorAttribute());
+    glDisableVertexAttribArray(window.getGlutCoordinateAttribute());
+    // /Color
+
 
     // Display result
     glutSwapBuffers();

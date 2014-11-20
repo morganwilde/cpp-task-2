@@ -53,3 +53,8 @@ double ShapeRectangle::getHeight()
 {
     return this->height;
 }
+double ShapeRectangle::getArea()
+{
+    return this->getWidth() * this->getHeight();
+}
+
